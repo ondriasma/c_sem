@@ -1,15 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "list.h"
 #include "matrix.h"
 #include "parser.h"
 
+#define INIT_CONSTANT 4
+
 int main(){
 
-    struct variable variables[] = NULL;
-    struct bound bounds[] = NULL;
+    struct list *variables = list_init(INIT_CONSTANT, sizeof(struct variable));
+    struct list *bounds = list_init(INIT_CONSTANT, sizeof(struct bound));
     struct function;
-    struct constraint cons[] = NULL;
+    struct list *constraints = list_init(INIT_CONSTANT, sizeof(struct constraint));
+    char line[255];
+
+    FILE *my_file = fopen("vyroba.lp", "r");
+        if(my_file == NULL){
+            printf("error opening file");
+            return 1;
+        }
+
+
+
+    while(fgets(line, sizeof(line), my_file)){
+        if (strcmp(line, "/", 1) == 0)
+        {
+            continue;
+        }
+        
+        remove_spaces(line);
+
+        printf("%s", line);
+        if (strncmp(line, "Minimize", 8) == 0 || strncmp(line, "Maximize", 8) == 0) {
+            	
+            }
+        }
+        
 
     struct matrix *tableau = matrix_allocate(5,5);
 

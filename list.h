@@ -1,17 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifndef LIST_H
+#define LIST_H
 
 struct list{
     void *vars;
     size_t length;
     size_t used;
-    size_t size;
+    size_t item_size;
 };
 
 
-void list_init(struct list *l, size_t length, size_t size);
+struct list *list_init(size_t length, size_t item_size);
 
-void list_append(struct list *l, struct variable var);
+int list_append(struct list *l, void *data);
 
-void list_free(struct list *l);
+int list_expand(struct list **l);
+
+int list_free(struct list *l);
+
+#endif
