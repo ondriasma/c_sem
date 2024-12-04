@@ -1,3 +1,6 @@
+#ifndef STACK_H
+#define STACK_H
+
 #include "parser.h"
 
 struct stack{
@@ -16,3 +19,6 @@ int stack_expand(struct stack **s);
 struct token stack_pop(struct stack *s);
 
 struct token stack_top(struct stack *s);
+
+
+#endif

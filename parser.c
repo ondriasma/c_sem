@@ -31,7 +31,7 @@ void remove_spaces(char *line){/*unused right now*/
 }
 
 void parse_variables(char *line, struct list *l){
-    list_init(l, 0, MAX_VAR_LENGTH * sizeof(char));
+    /*list_init(l, 0, MAX_VAR_LENGTH * sizeof(char));*/
     char *var;
     var = strtok(line, " ");
     while(var != NULL){
@@ -44,10 +44,10 @@ void parse_variables(char *line, struct list *l){
 
 int parse_constraint(char *line, struct list *l){
     struct constraint c;
-    struct list l;
+    struct list nl;/*tady nevím co*/
     int negative = 1;
 
-    /*Získání operátorů nerovnosti a pravé strany rovnice TODO opačné znaménko nerovnosti*/
+    /*Získání operátorů nerovnosti a pravé strany rovnice*/
     char *rightside = strchr(line, '<');
     if (rightside == NULL) {
         rightside = strchr(line, '>');
@@ -72,7 +72,9 @@ int parse_constraint(char *line, struct list *l){
         printf("Levá strana rovnice: %s\n", leftside);/*TODO všechny printy pouze pro debug, poté odstranit*/
     }
 
-    struct token *tokens = list_init(INIT_SIZE, sizeof(struct token));
+    struct token *tokens = malloc(INIT_SIZE * sizeof(struct token));
+
+    tokenize(leftside, tokens);
 
 
     
@@ -98,68 +100,74 @@ int tokenize(char *line, struct token *tokens){
             continue;   /*ignorujeme mezery*/
         }
 
-        if(isdigit(line[i])){
+        else if(isdigit(line[i])){
             enum type current = NUMBER;
             struct token new_tok;
             new_tok.type = current;
             tokstart = i;
-            tokend = i;
+            /*tokend = i;*/
             do{
-                tokend++;
+                /*tokend++;*/
                 i++;
 
             } while (isdigit(line[i]) || line[i] == '.');/*tečka kvůli desetinným číslům*/
-            strncpy(new_tok.value, line[tokstart], i - tokstart);
-            add_token(tokens, new_tok, tokens_size, tokens_used);
+            strncpy(new_tok.value, line + tokstart, i - tokstart);
+            new_tok.value[i - tokstart] = '\0';
+            add_token(&tokens, new_tok, &tokens_size, &tokens_used);
             new_tok.type = OPERATOR2;
-            new_tok.value = "*";
-            add_token(tokens, new_tok, tokens_size, tokens_used);
+            strncpy(new_tok.value, "*", 2); // Copies the string, including the null terminator
+            add_token(&tokens, new_tok, &tokens_size, &tokens_used);
 
 
         }
 
-        if(isalpha(line[i])){
+        else if(isalpha(line[i])){
             struct token new_tok;
             enum type current = VARIABLE;
             new_tok.type = current;
             tokstart = i;
             do{
                 i++;
-            } while(!isoperator(line[i]) && !isparenthesis(line[i]));
+            } while(!isoperator(line[i]) && !isparenthesis(line[i]) && line[i] != ' ');
 
-            strncpy(new_tok.value, line[tokstart], i - tokstart);
-            add_token(tokens, new_tok, tokens_size, tokens_used);
+            strncpy(new_tok.value, line + tokstart, i - tokstart);
+            new_tok.value[i - tokstart] = '\0';
+            add_token(&tokens, new_tok, &tokens_size, &tokens_used);
         }
 
-        if(isoperator(line[i])){
+        else if(isoperator(line[i])){
             struct token new_tok;
-            if(line[i] == "*"){
-                enum type current = OPERATOR2;
+            enum type current;
+            if(line[i] == '*'){
+                current = OPERATOR2;
             }
             else{
-                 enum type current = OPERATOR1;
+                current = OPERATOR1;/*všechny přípustné operátory kromě násobení mají nižší prioritu*/
             }
 
             new_tok.type = current;
-            strncpy(new_tok.value, line[i], 1);
-            add_token(tokens, new_tok, tokens_size, tokens_used);
+            new_tok.value[0] = line[i]; 
+            new_tok.value[1] = '\0'; 
+            add_token(&tokens, new_tok, &tokens_size, &tokens_used);
             i++;
 
         }
 
-        if(isparenthesis(line[i])){
+        else if(isparenthesis(line[i])){
             struct token new_tok;
-            if(line[i] == "(" || line[i] == '[' || line [i] == '{'){
-                enum type current = OPPAR;
-                strncpy(new_tok.value, "(", 1); /*dále budu pracovat pouze s jednoduchými závorkami*/
+            enum type current;
+
+            if(line[i] == '(' || line[i] == '[' || line [i] == '{'){
+                current = OPPAR;
+                strncpy(new_tok.value, "(", 2); /*dále budu pracovat pouze s jednoduchými závorkami*/
             }
             else{
-                enum type current = CLPAR;
-                strncpy(new_tok.value, ")", 1);
+                current = CLPAR;
+                strncpy(new_tok.value, ")", 2);/*kv;li null terminatingu*/
             }
 
             new_tok.type = current;
-            add_token(tokens, new_tok, tokens_size, tokens_used);
+            add_token(&tokens, new_tok, &tokens_size, &tokens_used);
             i++;
 
         }
@@ -182,8 +190,10 @@ int add_token(struct token **tokens, struct token token, size_t *size, size_t *u
         *tokens = temp;
     }
 
-    *tokens[++(*size)] = token;
+    (*tokens)[*used] = token;
+    (*used)++;
 
+    return 0;
 }
 
 int isoperator(int c) {
@@ -191,10 +201,10 @@ int isoperator(int c) {
 
     
     if (strchr(chars, c)) {
-        return 0; 
+        return 1; 
     }
 
-    return 1; 
+    return 0; 
 }
 
 int isparenthesis(int c) {
@@ -238,3 +248,5 @@ int shunting_yard(struct token **tokens, size_t size){
 
     /*free původní array*/
 }
+
+

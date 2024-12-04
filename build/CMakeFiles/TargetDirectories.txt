@@ -1,0 +1,3 @@
+/home/admin123/sem1/c_sem/build/CMakeFiles/prg.dir
+/home/admin123/sem1/c_sem/build/CMakeFiles/edit_cache.dir
+/home/admin123/sem1/c_sem/build/CMakeFiles/rebuild_cache.dir

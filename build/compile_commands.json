@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/home/admin123/sem1/c_sem/build",
+  "command": "/usr/bin/gcc    -Wall -Wextra -pedantic -g -o CMakeFiles/prg.dir/main.c.o -c /home/admin123/sem1/c_sem/main.c",
+  "file": "/home/admin123/sem1/c_sem/main.c"
+},
+{
+  "directory": "/home/admin123/sem1/c_sem/build",
+  "command": "/usr/bin/gcc    -Wall -Wextra -pedantic -g -o CMakeFiles/prg.dir/list.c.o -c /home/admin123/sem1/c_sem/list.c",
+  "file": "/home/admin123/sem1/c_sem/list.c"
+},
+{
+  "directory": "/home/admin123/sem1/c_sem/build",
+  "command": "/usr/bin/gcc    -Wall -Wextra -pedantic -g -o CMakeFiles/prg.dir/matrix.c.o -c /home/admin123/sem1/c_sem/matrix.c",
+  "file": "/home/admin123/sem1/c_sem/matrix.c"
+},
+{
+  "directory": "/home/admin123/sem1/c_sem/build",
+  "command": "/usr/bin/gcc    -Wall -Wextra -pedantic -g -o CMakeFiles/prg.dir/parser.c.o -c /home/admin123/sem1/c_sem/parser.c",
+  "file": "/home/admin123/sem1/c_sem/parser.c"
+},
+{
+  "directory": "/home/admin123/sem1/c_sem/build",
+  "command": "/usr/bin/gcc    -Wall -Wextra -pedantic -g -o CMakeFiles/prg.dir/stack.c.o -c /home/admin123/sem1/c_sem/stack.c",
+  "file": "/home/admin123/sem1/c_sem/stack.c"
+}
+]

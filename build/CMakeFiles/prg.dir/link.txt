@@ -1,0 +1,1 @@
+/usr/bin/gcc  -Wall -Wextra -pedantic -g CMakeFiles/prg.dir/main.c.o CMakeFiles/prg.dir/list.c.o CMakeFiles/prg.dir/matrix.c.o CMakeFiles/prg.dir/parser.c.o CMakeFiles/prg.dir/stack.c.o -o prg 

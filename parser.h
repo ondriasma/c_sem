@@ -34,7 +34,7 @@ struct constraint{
 };
 
 struct token{
-    char *value;
+    char value[255];/*must be initialized or segfault in strncpy*/
     enum type type;
 };
 
@@ -46,7 +46,13 @@ int parse_constraint(char *line, struct list *l);
 
 int tokenize(char *line, struct token *tokens);
 
-int shunting_yard(struct token *tokens, size_t size);
+int add_token(struct token **tokens, struct token token, size_t *size, size_t *used);
+
+int isoperator(int c);
+
+int isparenthesis(int c);
+
+int shunting_yard(struct token **tokens, size_t size);
 
 
 #endif

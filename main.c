@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "list.h"
 #include "matrix.h"
 #include "parser.h"
+#include "stack.h"
 
 #define INIT_CONSTANT 4
 
@@ -15,6 +17,8 @@ int main(){
     struct list *constraints = list_init(INIT_CONSTANT, sizeof(struct constraint));
     char line[255];
 
+    
+
     FILE *my_file = fopen("vyroba.lp", "r");
         if(my_file == NULL){
             printf("error opening file");
@@ -24,18 +28,32 @@ int main(){
 
 
     while(fgets(line, sizeof(line), my_file)){
-        if (strcmp(line, "/", 1) == 0)
+        if (strncmp(line, "/", 1) == 0)
         {
             continue;
         }
         
-        remove_spaces(line);
+        /*remove_spaces(line);*/
 
         printf("%s", line);
+
+        if(strncmp(line, "Subject", 7) == 0){
+            puts("asf");
+
+            if (fgets(line, sizeof(line), my_file)) {
+                printf("Processing next line: %s", line);
+                parse_constraint(line, constraints);
+            
+        }
+            
+        }
+
         if (strncmp(line, "Minimize", 8) == 0 || strncmp(line, "Maximize", 8) == 0) {
-            	
+            	puts("detected");
             }
         }
+
+        
         
 
     struct matrix *tableau = matrix_allocate(5,5);
@@ -54,7 +72,7 @@ int main(){
         printf("\n");
     }
 
-
+    fclose(my_file);
 
     return EXIT_SUCCESS;
 }
